@@ -1,3 +1,5 @@
 <Solution>
-  <Project Path="Carpooling.App/Carpooling.App.csproj" />
+  <Project Path="Carpooling.App/Carpooling.App.Api.csproj" />
+  <Project Path="Carpooling.Business/Carpooling.App.Business.csproj" Id="454e5fea-ed69-4768-87c7-27f0a79ec94a" />
+  <Project Path="Carpooling.Repository/Carpooling.App.Repository.csproj" Id="17c23142-9a10-46d3-bdbc-d9957e530192" />
 </Solution>

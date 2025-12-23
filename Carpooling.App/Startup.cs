@@ -36,16 +36,21 @@ namespace Carpooling.App
             });
 
             services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("v1", new() { Title = "Carpooling API", Version = "v1" });
+            });
         }
 
         public void Configure(WebApplication app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
+            // Always enable Swagger and serve UI at application root so opening the app loads Swagger by default.
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+                options.RoutePrefix = "/docs"; // serve UI at '/'
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "Carpooling API v1");
+            });
 
             app.UseHttpsRedirection();
 
