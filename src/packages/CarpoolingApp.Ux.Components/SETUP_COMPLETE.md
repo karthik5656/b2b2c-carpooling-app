@@ -27,6 +27,7 @@ Latest build generates:
 
 -   `dist/index.es.js` (13.86 kB) - ES Module
 -   `dist/index.umd.js` (9.59 kB) - UMD Bundle
+-   `dist/index.d.ts` - TypeScript type declarations
 -   `dist/ux-components.css` (1.95 kB) - Styles
 
 ---

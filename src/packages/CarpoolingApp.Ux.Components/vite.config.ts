@@ -1,6 +1,7 @@
 /// <reference types="vitest/config" />
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import dts from "vite-plugin-dts";
 
 // https://vite.dev/config/
 import path from "node:path";
@@ -11,32 +12,19 @@ const dirname = typeof __dirname !== "undefined" ? __dirname : path.dirname(file
 
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
-	plugins: [react()],
+	plugins: [react(), dts({ include: ["src"], tsconfigPath: "tsconfig.app.json" })],
 	build: {
 		lib: {
 			entry: path.resolve(dirname, "src/index.ts"),
 			name: "CarpoolingUxComponents",
-			formats: ["es", "umd"],
+			fileName: (format) => `index.${format === "es" ? "js" : "umd.js"}`,
+			formats: ["es"],
 		},
 		rollupOptions: {
 			// Externalize dependencies that shouldn't be bundled
-			external: ["react", "react-dom"],
-			output: [
-				{
-					format: "umd",
-					name: "CarpoolingUxComponents",
-					entryFileNames: "index.umd.js",
-					globals: {
-						"react": "React",
-						"react-dom": "ReactDOM",
-					},
-				},
-				{
-					format: "es",
-					entryFileNames: "index.es.js",
-				},
-			],
+			external: ["react", "react-dom", "react/jsx-runtime"],
 		},
+		copyPublicDir: false,
 	},
 	test: {
 		projects: [

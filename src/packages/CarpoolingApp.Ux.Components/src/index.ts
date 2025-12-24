@@ -1,14 +1,8 @@
 // Export all components from the stories directory
-export { Button } from "./stories/Button";
-export type { ButtonProps } from "./stories/Button";
+export { Button } from "./components/Button/Button";
+export type { ButtonProps } from "./components/Button/Button";
 
-export { Header } from "./stories/Header";
-export type { HeaderProps } from "./stories/Header";
+export { Header } from "./components/Header/Header";
+export type { HeaderProps } from "./components/Header/Header";
 
-export { Page } from "./stories/Page";
-export type { PageProps } from "./stories/Page";
-
-// Export all types and interfaces
-export * from "./stories/Button";
-export * from "./stories/Header";
-export * from "./stories/Page";
+// Note: Page component is for Storybook demonstration and not exported as a library component
