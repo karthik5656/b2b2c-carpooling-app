@@ -1,73 +1,149 @@
-# React + TypeScript + Vite
+# Quick Start - Component Library Scripts
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 📦 Build Commands
 
-Currently, two official plugins are available:
+### 1. Build Library for Distribution
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run build:lib
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+**Generates:**
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+-   `dist/index.es.js` - ES Module (for modern bundlers)
+-   `dist/index.umd.js` - UMD Bundle (for CommonJS/browsers)
+-   `dist/ux-components.css` - Bundled component styles
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 2. Create TGZ Package (for distribution)
+
+```bash
+npm run pack
 ```
+
+**Generates:**
+
+-   `carpooling-ux-components-0.0.1.tgz` - Complete package archive
+-   Automatically builds library before packing
+
+### 3. Development with Storybook
+
+```bash
+npm run storybook
+```
+
+Opens Storybook at `http://localhost:6006` to develop and test components interactively.
+
+### 4. Build Static Storybook
+
+```bash
+npm run build-storybook
+```
+
+Generates a static site for sharing documentation.
+
+---
+
+## 🔗 How to Use in Your App
+
+### Option A: TGZ File (Recommended for Distribution)
+
+**Step 1: Generate TGZ in library**
+
+```bash
+npm run pack
+```
+
+Creates `carpooling-ux-components-0.0.1.tgz`
+
+**Step 2: In your consumer app, add to `package.json`:**
+
+```json
+{
+	"dependencies": {
+		"@carpooling/ux-components": "file:../path/to/carpooling-ux-components-0.0.1.tgz"
+	}
+}
+```
+
+**Step 3: Install**
+
+```bash
+npm install
+```
+
+### Option B: Local File Path (Best for development)
+
+In your consumer app's `package.json`:
+
+```json
+{
+	"dependencies": {
+		"@carpooling/ux-components": "file:../path/to/CarpoolingApp.Ux.Packages"
+	}
+}
+```
+
+Then run: `npm install`
+
+### Option C: NPM Link
+
+```bash
+# In component library
+npm link
+
+# In consumer app
+npm link @carpooling/ux-components
+```
+
+### Import Components
+
+```typescript
+import { Button, Header, Page } from "@carpooling/ux-components";
+
+// Use in your React app
+export default function App() {
+	return <Button primary size="large" label="Get Started" onClick={() => alert("Clicked!")} />;
+}
+```
+
+---
+
+## 📋 File Structure
+
+```
+├── dist/                  ← Build output (publish this)
+├── src/
+│   ├── index.ts          ← Main export file
+│   ├── assets/           ← Component assets
+│   └── stories/          ← Components & Storybook stories
+│       ├── Button.tsx
+│       ├── Header.tsx
+│       └── Page.tsx
+├── .storybook/           ← Storybook config
+├── package.json          ← Package configuration
+└── vite.config.ts        ← Build configuration
+```
+
+---
+
+## ✅ Workflow
+
+1. **Develop**: `npm run storybook`
+2. **Check**: View components in Storybook at `http://localhost:6006`
+3. **Build**: `npm run build:lib`
+4. **Test**: Link to consuming app and test integration
+5. **Update version** in `package.json` before publishing
+
+---
+
+## 📝 Adding New Components
+
+1. Create component: `src/stories/YourComponent.tsx`
+2. Create stories: `src/stories/YourComponent.stories.ts`
+3. Export in `src/index.ts`:
+    ```typescript
+    export { YourComponent } from "./stories/YourComponent";
+    export type { YourComponentProps } from "./stories/YourComponent";
+    ```
+4. Run `npm run storybook` to test
+5. Rebuild: `npm run build:lib`
