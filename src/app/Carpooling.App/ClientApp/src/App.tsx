@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
@@ -10,11 +10,9 @@ function App() {
   return (
     <>
       <Button
-        label='Carpooling UX Button'
+        label="Carpooling UX Button"
         onClick={() => alert("Button from Carpooling UX Components clicked!")}
       />
-
-
 
       <div>
         <a href="https://vite.dev" target="_blank">

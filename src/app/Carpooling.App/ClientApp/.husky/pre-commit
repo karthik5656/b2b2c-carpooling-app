@@ -1,6 +1,44 @@
 #!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
 
+# Pre-commit hook to run linting and build checks
+# This prevents commits with lint or build errors
+
+# The hook is at: .husky/pre-commit
+# We need to get to: ClientApp directory (parent of .husky)
+
+HOOK_DIR="$(cd "$(dirname "$0")" && pwd)"
+CLIENT_APP_DIR="$(dirname "$HOOK_DIR")"
+
+cd "$CLIENT_APP_DIR" || exit 1
+
+echo "🔍 Running pre-commit checks in $(pwd)..."
+echo ""
+
+echo "1️⃣  Running lint-staged..."
 npx lint-staged
+LINT_STAGED_EXIT=$?
+
+echo ""
+echo "2️⃣  Running ESLint..."
 npm run lint
+LINT_EXIT=$?
+
+echo ""
+echo "3️⃣  Running Build..."
 npm run build
+BUILD_EXIT=$?
+
+echo ""
+if [ $LINT_STAGED_EXIT -eq 0 ] && [ $LINT_EXIT -eq 0 ] && [ $BUILD_EXIT -eq 0 ]; then
+  echo "✅ All pre-commit checks passed!"
+  exit 0
+else
+  echo "❌ Pre-commit checks failed!"
+  [ $LINT_STAGED_EXIT -ne 0 ] && echo "  - lint-staged failed"
+  [ $LINT_EXIT -ne 0 ] && echo "  - Linting failed"
+  [ $BUILD_EXIT -ne 0 ] && echo "  - Build failed"
+  echo ""
+  echo "Fix the errors above and try committing again."
+  exit 1
+fi
+
